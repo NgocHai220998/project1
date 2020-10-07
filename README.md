@@ -1,24 +1,11 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+プロジェクトを作成する前に、以下のリンクの通りにやってください。
+https://docs.docker.com/compose/rails/
 
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Error: Database is uninitialized and superuser password is not specified.というエラーが発生した場合、
+dockerーcompose.ymlに　
+  environment:
+    POSTGRES_DB: "db"
+    POSTGRES_HOST_AUTH_METHOD: "trust"
+追加してください。
