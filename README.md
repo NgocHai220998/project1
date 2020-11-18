@@ -9,3 +9,7 @@ dockerーcompose.ymlに　
     POSTGRES_DB: "db"
     POSTGRES_HOST_AUTH_METHOD: "trust"
 追加してください。
+
+Import Database:
+  テーブルを作成する
+  psql -v -U postgres -h db -d project1_development -f project1/tmp/db/learning_db
