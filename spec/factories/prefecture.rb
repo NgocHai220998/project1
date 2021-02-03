@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :prefecture do
-    name {Faker::Name}
-    name_spoken {Faker::Name}
+    name {"北海道"}
+    name_spoken {"ほっかいどう"}
   end
 end

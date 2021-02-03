@@ -1,9 +1,7 @@
 FactoryBot.define do
   factory :spot do
-    name {Faker::Name}
-    body {Faker::Lorem}
-    address {Faker::Address}
-    base_id {"#{Faker::Number.between(from: 10000, to: 99999)}KANK#{Faker::Number.between(from: 10000000, to: 99999999)}"}
-    prefecture_id {Faker::Number.between(from: 1, to: 47)}
+    prefecture
+    name {"原生花園 あやめヶ原"}
+    body {"厚岸海岸チンベの鼻一帯の台地上に，野性のヒオウギアヤメ厚岸海岸チンベの鼻一帯の台地上に，野性のヒオウギアヤメ"}
   end
 end
