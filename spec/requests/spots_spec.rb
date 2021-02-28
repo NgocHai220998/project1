@@ -2,7 +2,7 @@ require 'rails_helper'
 include Capybara::RSpecMatchers
 
 RSpec.describe "Spots", type: :request do
-  describe "GET /spots" do
+  describe "GET /spots" do 
     let(:spot_tag) {FactoryBot.create :spot_tag}
     before { FactoryBot.create_list(:spot_tag, 31) }
     before(:each) do
@@ -35,6 +35,11 @@ RSpec.describe "Spots", type: :request do
 
     it "ページネーションが表示されていること" do
       expect(response.body).to have_selector("ul.pagination")
+    end
+
+    it "ページ2を表示されていること" do
+      get "/?page=2"
+      expect(response.body).to include("北海道")
     end
   end
 end

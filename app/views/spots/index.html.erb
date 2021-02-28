@@ -9,9 +9,9 @@
     </tr>
   </thead>
   <tbody>
-    <% @spots.each_with_index do |spot,index| %>
+    <% @spots.each.with_index(1) do |spot, index| %>
     <tr class="table-info">
-      <th scope="row"><%= index + 1 %></th>
+      <th scope="row"><%= index %></th>
       <td><%= spot.name %></td>
       <td><%= spot.body.truncate(30) %></td>
       <td><%= spot.prefecture.name %></td>
