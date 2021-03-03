@@ -42,7 +42,6 @@ RSpec.describe "Spots", type: :request do
 
     it "ページ2を表示されていること" do
       get "/?page=2"
-      expect(response.body).to include(spots[30].name)
       (0... SpotsController::SPOT_LIMIT - 1).each do |i|
         expect(response.body).not_to include(spots[i].name)
       end
