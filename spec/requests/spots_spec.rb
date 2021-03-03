@@ -3,7 +3,7 @@ include Capybara::RSpecMatchers
 
 RSpec.describe "Spots", type: :request do
   describe "GET /spots" do 
-    let!(:spot_tags){ FactoryBot.create_list(:spot_tag, 31) }
+    let!(:spots){ FactoryBot.create_list(:spot, 31) }
     before(:each) do
       get root_path
     end
@@ -13,21 +13,27 @@ RSpec.describe "Spots", type: :request do
     end
 
     it "tag_nameが表示されていること" do
-      expect(response.body).to include(spot_tags[0].tag.name)
+      (0... SpotsController::SPOT_LIMIT - 1).each do |i|
+        expect(response.body).to include(spots[i].tag.name)
+      end
     end
 
     it "prefectureの名前が表示されていること" do
-      expect(response.body).to include(spot_tags[0].spot.prefecture.name)
+      (0... SpotsController::SPOT_LIMIT - 1).each do |i|
+        expect(response.body).to include(spots[i].prefecture.name)
+      end
     end
 
     it "spotの名前が表示されていること" do
-      expect(response.body).to include(spot_tags[0].spot.name)
+      (0... SpotsController::SPOT_LIMIT - 1).each do |i|
+        expect(response.body).to include(spots[i].name)
+      end
     end
 
     it "spotのbodyが30字以内で表示されていること" do
-      expect(spot_tags[0].spot.body.truncate(30).length).to eq(30)
-      expect(response.body).to have_content(spot_tags[0].spot.body.truncate(30))
-      byebug
+      expect(spots[0].body.truncate(30).length).to eq(30)
+      expect(response.body).to have_content(spots[0].body.truncate(30))
+      expect(response.body).not_to have_content(spots[0].body[30..-1])
     end
 
     it "ページネーションが表示されていること" do
@@ -36,7 +42,10 @@ RSpec.describe "Spots", type: :request do
 
     it "ページ2を表示されていること" do
       get "/?page=2"
-      expect(response.body).to include(spot_tags[30].spot.name)
+      expect(response.body).to include(spots[30].name)
+      (0... SpotsController::SPOT_LIMIT - 1).each do |i|
+        expect(response.body).not_to include(spots[i].name)
+      end
     end
   end
 end

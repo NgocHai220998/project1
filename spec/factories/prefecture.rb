@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :prefecture do
-    name {"北海道"}
-    name_spoken {"ほっかいどう"}
+    sequence(:name) { |n| "#{n}北海道" }
+    sequence(:name_spoken) { |n| "#{n}ほっかいどう" }
   end
 end

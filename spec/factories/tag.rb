@@ -1,5 +1,5 @@
 FactoryBot.define do
   factory :tag do
-    name {"高原"}
+    sequence(:name) { |n| "#{n}高原" }
   end
 end
