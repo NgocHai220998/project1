@@ -4,6 +4,7 @@ include Capybara::RSpecMatchers
 RSpec.describe "Spots", type: :request do
   describe "GET /spots" do 
     let!(:spots){ FactoryBot.create_list(:spot, 31) }
+
     before(:each) do
       get root_path
     end
@@ -41,7 +42,7 @@ RSpec.describe "Spots", type: :request do
     end
 
     it "ページ2を表示されていること" do
-      get "/?page=2"
+      get root_path(page: 2)
       (0... SpotsController::SPOT_LIMIT - 1).each do |i|
         expect(response.body).not_to include(spots[i].name)
       end
