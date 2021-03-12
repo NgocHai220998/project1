@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_25_054000) do
+ActiveRecord::Schema.define(version: 2021_03_12_065734) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,6 +20,17 @@ ActiveRecord::Schema.define(version: 2020_12_25_054000) do
     t.string "name_spoken"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "spot_reviews", force: :cascade do |t|
+    t.integer "user_id"
+    t.datetime "posted_at"
+    t.string "comment"
+    t.integer "view_count"
+    t.bigint "spot_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["spot_id"], name: "index_spot_reviews_on_spot_id"
   end
 
   create_table "spot_tags", force: :cascade do |t|
@@ -42,6 +53,7 @@ ActiveRecord::Schema.define(version: 2020_12_25_054000) do
     t.bigint "prefecture_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "spot_reviews_count"
     t.index ["prefecture_id"], name: "index_spots_on_prefecture_id"
   end
 
@@ -51,5 +63,6 @@ ActiveRecord::Schema.define(version: 2020_12_25_054000) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  add_foreign_key "spot_reviews", "spots"
   add_foreign_key "spots", "prefectures"
 end
