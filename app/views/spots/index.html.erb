@@ -17,7 +17,14 @@
       <td><%= spot.body.truncate(30) %></td>
       <td><%= spot.prefecture.name %></td>
       <td><%= spot.spot_tag.tag.name %></td>
-      <td><%= spot.spot_reviews_count%></td>
+      <td class="review-modal" data-id="<%= spot.id %>"><%= spot.spot_reviews_count%></td>
+    </tr>
+    <tr class="recent-review hidden" id="spot-<%= spot.id %>" >
+      <th colspan="6">
+        <div id="spot-review-<%= spot.id %>">
+          <%= render 'layouts/modal', spot: spot %>
+        </div>
+      </th>
     </tr>
     <% end %>
   </tbody>
