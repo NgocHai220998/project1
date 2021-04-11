@@ -58,19 +58,11 @@ RSpec.describe "Spots", type: :request do
 
     it "レビューのコメントが20字以内で表示されていること" do
       (0... SpotsController::SPOT_LIMIT - 1).each do |i|
-        if(spots[i].spot_reviews_count>=3)
-          recent_review = spots[i].spot_review.order(posted_at: :desc).first(3)
-          (0... 2).each do |j|
-            expect(recent_review[j].comment.truncate(20).length).to eq(20)
-            expect(response.body).to have_content(recent_review[j].comment.truncate(20))
-            expect(response.body).not_to have_content(recent_review[j].comment[20..-1])
-          end
-        else
-          (0... spots[i].spot_reviews_count - 1).each do |k|
-            expect(spots[i].spot_review[k].comment.truncate(20).length).to eq(20)
-            expect(response.body).to have_content(spots[i].spot_review[k].comment.truncate(20))
-            expect(response.body).not_to have_content(spots[i].spot_review[k].comment[20..-1])
-          end
+        recent_review = spots[i].spot_review.order(posted_at: :desc).first(3)
+        (0... recent_review.count - 1).each do |j|
+          expect(recent_review[j].comment.truncate(20).length).to eq(20)
+          expect(response.body).to have_content(recent_review[j].comment.truncate(20))
+          expect(response.body).not_to have_content(recent_review[j].comment[20..-1])
         end
       end
     end
