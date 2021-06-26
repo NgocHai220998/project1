@@ -58,42 +58,10 @@ RSpec.describe "Spots", type: :request do
 
     it "レビューのコメントが20字以内で表示されていること" do
       (0... SpotsController::SPOT_LIMIT - 1).each do |i|
-        recent_review = spots[i].spot_review.order(posted_at: :desc).first(3)
-        (0... recent_review.count - 1).each do |j|
-          expect(recent_review[j].comment.truncate(20).length).to eq(20)
-          expect(response.body).to have_content(recent_review[j].comment.truncate(20))
-          expect(response.body).not_to have_content(recent_review[j].comment[20..-1])
-        end
-      end
-    end
-
-    it "レビューを日付によってソートされている" do
-      (0... SpotsController::SPOT_LIMIT - 1).each do |i|
-        review = spots[i].spot_review.order(posted_at: :desc)
-        (0... review.count - 1).each do |j|
-          expect(review[j].posted_at).to be >=review[j+1].posted_at
-        end
-      end
-    end
-
-    it "3つ以上レビューのspotが3つだけ表示されている" do
-      (0... SpotsController::SPOT_LIMIT - 1).each do |i|
-        if(spots[i].spot_reviews_count>=3)
-          recent_review = spots[i].spot_review.order(posted_at: :desc).first(3)
-          expect(recent_review.count).to eq(3)
-          (0... 2).each do |j|
-            expect(response.body).to include(recent_review[j].comment.truncate(20))
-          end
-        end
-      end
-    end
-
-    it "3つ以下レビューのspotが全部表示されている" do
-      (0... SpotsController::SPOT_LIMIT - 1).each do |i|
-        if(spots[i].spot_reviews_count<3)
-          (0... spots[i].spot_reviews_count - 1).each do |j|
-            expect(response.body).to include(spots[i].spot_review[j].comment.truncate(20))
-          end
+        spots[i].spot_reviews.first(3).each do |recent_review|
+          expect(recent_review.comment.truncate(20).length).to eq(20)
+          expect(response.body).to have_content(recent_review.comment.truncate(20))
+          expect(response.body).not_to have_content(recent_review.comment[20..-1])
         end
       end
     end
