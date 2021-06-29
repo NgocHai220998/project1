@@ -8,7 +8,7 @@ RSpec.describe Spot, type: :model do
     end
 
     it "should has many spot_reviews" do
-      association = described_class.reflect_on_association(:spot_review)
+      association = described_class.reflect_on_association(:spot_reviews)
       expect(association.macro).to eq :has_many
     end
 

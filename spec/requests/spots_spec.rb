@@ -2,8 +2,8 @@ require 'rails_helper'
 include Capybara::RSpecMatchers
 
 RSpec.describe "Spots", type: :request do
-  describe "GET /spots" do 
-    let!(:spots){ FactoryBot.create_list(:spot, 31) }
+  describe "GET /spots" do
+    let!(:spots){ FactoryBot.create_list(:spot, 31, :with_spot_review)}
 
     before(:each) do
       get root_path
@@ -32,9 +32,11 @@ RSpec.describe "Spots", type: :request do
     end
 
     it "spotのbodyが30字以内で表示されていること" do
-      expect(spots[0].body.truncate(30).length).to eq(30)
-      expect(response.body).to have_content(spots[0].body.truncate(30))
-      expect(response.body).not_to have_content(spots[0].body[30..-1])
+      (0... SpotsController::SPOT_LIMIT - 1).each do |i|
+        expect(spots[i].body.truncate(30).length).to eq(30)
+        expect(response.body).to have_content(spots[i].body.truncate(30))
+        expect(response.body).not_to have_content(spots[i].body[30..-1])
+      end
     end
 
     it "ページネーションが表示されていること" do
@@ -51,6 +53,16 @@ RSpec.describe "Spots", type: :request do
     it "レビューの総数を表示されていること" do
       (0... SpotsController::SPOT_LIMIT - 1).each do |i|
         expect(response.body).to have_content(spots[i].spot_reviews_count)
+      end
+    end
+
+    it "レビューのコメントが20字以内で表示されていること" do
+      (0... SpotsController::SPOT_LIMIT - 1).each do |i|
+        spots[i].spot_reviews.first(3).each do |recent_review|
+          expect(recent_review.comment.truncate(20).length).to eq(20)
+          expect(response.body).to have_content(recent_review.comment.truncate(20))
+          expect(response.body).not_to have_content(recent_review.comment[20..-1])
+        end
       end
     end
   end
