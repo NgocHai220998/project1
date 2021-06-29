@@ -1,3 +1,12 @@
+<%= search_form_for @q, url: search_spots_path, html: {method: :get} do |f| %>
+  <%= f.label :spot_schedule_start_on_gteq, "開始日" %>
+  <%= f.date_field :spot_schedule_start_on_gteq %>
+
+  <%= f.label :spot_schedule_end_on_lteq, "終了日" %>
+  <%= f.date_field :spot_schedule_end_on_lteq %>
+
+  <%= f.submit "検索" %>
+<% end %>
 <table class="table table-striped">
   <thead>
     <tr>
