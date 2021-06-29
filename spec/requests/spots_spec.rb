@@ -65,5 +65,16 @@ RSpec.describe "Spots", type: :request do
         end
       end
     end
+
+    it "スケジュールを検索する" do
+      byebug
+      spot_schedule_start_on = Time.zone.now - rand(5..10).days 
+      spot_schedule_end_on = Time.zone.now - rand(15..20).days 
+      
+      (0... Spot.count-1).each do |i|
+        if spots[i].spot_schedule.start_on
+        end
+      end
+    end
   end
 end

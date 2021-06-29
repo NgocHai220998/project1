@@ -1,5 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe SpotSchedule, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  context "Associations" do
+    it "should belongs to spot" do
+      association = described_class.reflect_on_association(:spot)
+      expect(association.macro).to eq :belongs_to
+    end
+  end
 end
