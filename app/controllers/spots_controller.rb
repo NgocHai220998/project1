@@ -1,7 +1,7 @@
 class SpotsController < ApplicationController
   SPOT_LIMIT = 30
-  
-  before_action :get_params, only: [:index, :search]
+
+  before_action :spot_params, only: %i[index search]
 
   def index
     @spots = includes_table(Spot)
@@ -13,8 +13,8 @@ class SpotsController < ApplicationController
   end
 
   private
-  
-  def get_params
+
+  def spot_params
     @q = Spot.ransack(params[:q])
   end
 

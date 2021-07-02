@@ -10,5 +10,11 @@ FactoryBot.define do
         FactoryBot.create_list(:spot_review, rand(1..50), spot: spot)
       end
     end
+
+    trait :with_spot_schedule do
+      after(:create) do |spot|
+        FactoryBot.create_list(:spot_schedule, rand(1..50), spot: spot)
+      end
+    end
   end
 end

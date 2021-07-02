@@ -3,7 +3,7 @@ include Capybara::RSpecMatchers
 
 RSpec.describe "Spots", type: :request do
   describe "GET /spots" do
-    let!(:spots){ FactoryBot.create_list(:spot, 31, :with_spot_review)}
+    let!(:spots){ FactoryBot.create_list(:spot, 31, :with_spot_review, :with_spot_schedule)}
 
     before(:each) do
       get root_path
@@ -62,6 +62,25 @@ RSpec.describe "Spots", type: :request do
           expect(recent_review.comment.truncate(20).length).to eq(20)
           expect(response.body).to have_content(recent_review.comment.truncate(20))
           expect(response.body).not_to have_content(recent_review.comment[20..-1])
+        end
+      end
+    end
+
+    it "日付を指定することが表示されていること" do
+      expect(response.body).to have_selector("input#q_spot_schedule_start_on_gteq")
+      expect(response.body).to have_selector("input#q_spot_schedule_end_on_lteq")
+    end
+
+    it "日付を指定することが表示されていること" do
+      params = {}
+      params['spot_schedule_start_on'] = Time.zone.now - rand(5..10).days
+      params['spot_schedule_end_on'] = Time.zone.now - rand(15..20).days
+
+      get(search_spots_path, params: params)
+      expect(response).to render_template('spots/index')
+      (0... Spot.count-1).each do |i|
+        if spots[i].spot_schedule.start_on <= params['spot_schedule_start_on'] && spots[i].spot_schedule.end_on >= params['spot_schedule_end_on']
+          expect(response.body).to have_content(spots[i].name)
         end
       end
     end
