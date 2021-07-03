@@ -5,6 +5,12 @@
   <%= f.label :spot_schedules_end_on_lteq, "終了日" %>
   <%= f.date_field :spot_schedules_end_on_lteq %>
 
+  <%= f.label :prefecture_name_eq, "都道府県" %>
+  <%= f.collection_select :prefecture_name_eq, Prefecture.all, :name, :name, {:include_blank => '設定なし'} %>
+
+  <%= f.label :tag_name_eq, "タグ" %>
+  <%= f.collection_select :tag_name_eq, Tag.all, :name, :name, {:include_blank => '設定なし'}, {:multiple => true} %>
+
   <%= f.submit "検索" %>
 <% end %>
 <table class="table table-striped mt-3">

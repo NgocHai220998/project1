@@ -65,6 +65,25 @@ RSpec.describe "Spots", type: :request do
         end
       end
     end
+
+    it "タグと都道府県を指定することが表示されていること" do
+      expect(response.body).to have_selector("select#q_tag_name_eq")
+      expect(response.body).to have_selector("select#q_prefecture_name_eq")
+    end
+
+    it "タグと都道府県を指定することが表示されていること" do
+      params = {}
+      params['tag_name'] = rand(1..50).to_s + "高原"
+      params['prefecture_name'] = rand(1..50).to_s + "北海道"
+
+      get(search_spots_path, params: params)
+      expect(response).to render_template('spots/index')
+      (0... Spot.count-1).each do |i|
+        if spots[i].tag.name == params['tag_name'] && spots[i].prefecture.name == params['prefecture_name']
+          expect(response.body).to have_content(spots[i].name)
+        end
+      end
+    end
   end
 
   describe '検索' do
