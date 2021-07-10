@@ -65,24 +65,92 @@ RSpec.describe "Spots", type: :request do
         end
       end
     end
+  end
 
-    it "日付を指定することが表示されていること" do
-      expect(response.body).to have_selector("input#q_spot_schedule_start_on_gteq")
-      expect(response.body).to have_selector("input#q_spot_schedule_end_on_lteq")
+  describe "検索" do
+    let!(:spot1) do
+      spot = FactoryBot.create(:spot)
+      FactoryBot.create(:spot_schedule, start_on: Time.zone.now - 11.days, end_on: Time.zone.now - 5.days, spot: spot)
+      spot
+    end
+
+    let!(:spot2) do
+      spot = FactoryBot.create(:spot)
+      FactoryBot.create(:spot_schedule, start_on: Time.zone.now - 9.days, end_on: Time.zone.now - 4.days, spot: spot)
+      spot
+    end
+
+    let!(:spot3) do
+      spot = FactoryBot.create(:spot)
+      FactoryBot.create(:spot_schedule, start_on: Time.zone.now - 8.days, end_on: Time.zone.now - 3.days, spot: spot)
+      spot
+    end
+
+    let!(:spot4) do
+      spot = FactoryBot.create(:spot)
+      FactoryBot.create(:spot_schedule, start_on: Time.zone.now - 7.days, end_on: Time.zone.now - 2.days, spot: spot)
+      spot
+    end
+
+    let!(:spot5) do
+      spot = FactoryBot.create(:spot)
+      FactoryBot.create(:spot_schedule, start_on: Time.zone.now - 6.days, end_on: Time.zone.now, spot: spot)
+      spot
+    end
+
+    before(:each) do
+      get root_path
     end
 
     it "日付を指定することが表示されていること" do
+      expect(response.body).to have_selector("input#q_spot_schedules_start_on_gteq")
+      expect(response.body).to have_selector("input#q_spot_schedules_end_on_lteq")
+    end
+
+    it "start_onが適当じゃない" do
       params = {}
-      params['spot_schedule_start_on'] = Time.zone.now - rand(5..10).days
-      params['spot_schedule_end_on'] = Time.zone.now - rand(15..20).days
+      params[:q] = {"spot_schedules_start_on_gteq"=> Time.zone.now, "spot_schedules_end_on_lteq"=> Time.zone.now + 7.days}
+
+      get(search_spots_path, params: params)
+      expect(response.body).not_to have_content(spot1.name)
+      expect(response.body).not_to have_content(spot2.name)
+      expect(response.body).not_to have_content(spot3.name)
+      expect(response.body).not_to have_content(spot4.name)
+      expect(response.body).not_to have_content(spot5.name)
+    end
+
+    it "end_onが適当じゃない" do
+      params = {}
+      params[:q] = {"spot_schedules_start_on_gteq"=> Time.zone.now - 9.days, "spot_schedules_end_on_lteq"=> Time.zone.now - 7.days}
+
+      get(search_spots_path, params: params)
+
+      expect(response.body).not_to have_content(spot1.name)
+      expect(response.body).not_to have_content(spot2.name)
+      expect(response.body).not_to have_content(spot3.name)
+      expect(response.body).not_to have_content(spot4.name)
+      expect(response.body).not_to have_content(spot5.name)
+    end
+
+    it "start_onとend_onが適当" do
+      params = {}
+      params[:q] = {"spot_schedules_start_on_gteq"=> Time.zone.now - 10.days, "spot_schedules_end_on_lteq"=> Time.zone.now - 1.days}
+
+      get(search_spots_path, params: params)
+      
+      expect(response.body).not_to have_content(spot1.name)
+      expect(response.body).to have_content(spot2.name)
+      expect(response.body).to have_content(spot3.name)
+      expect(response.body).to have_content(spot4.name)
+      expect(response.body).not_to have_content(spot5.name)
+    end
+
+    it "検索した後、indexに移動する" do
+      params = {}
+      params[:q] = {"spot_schedules_start_on_gteq"=> Time.zone.now - rand(6..10).days, "spot_schedules_end_on_lteq"=> Time.zone.now - rand(1..5).days}
 
       get(search_spots_path, params: params)
       expect(response).to render_template('spots/index')
-      (0... Spot.count-1).each do |i|
-        if spots[i].spot_schedule.start_on <= params['spot_schedule_start_on'] && spots[i].spot_schedule.end_on >= params['spot_schedule_end_on']
-          expect(response.body).to have_content(spots[i].name)
-        end
-      end
     end
   end
 end
