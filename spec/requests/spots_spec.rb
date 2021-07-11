@@ -65,6 +65,15 @@ RSpec.describe "Spots", type: :request do
         end
       end
     end
+
+    it "詳細ページを表示されていること" do
+      (0... SpotsController::SPOT_LIMIT - 1).each do |i|
+        params = {}
+        params[:id] = spots[i].id
+        get(spot_path(spots[i].id), params: params)
+        expect(response).to render_template("spots/show")
+      end
+    end
   end
 
   describe '検索' do

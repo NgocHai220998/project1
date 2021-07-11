@@ -21,4 +21,9 @@ class SpotsController < ApplicationController
   def includes_table(table)
     table.includes(:prefecture, spot_tag: :tag).page(params[:page]).per(SPOT_LIMIT)
   end
+
+  def show
+    @spot = Spot.find(params[:id])
+    puts params
+  end
 end
