@@ -1,7 +1,7 @@
 <% if @user.errors.any? %>
   <div id="error_explanation">
     <div class="alert alert-danger">
-      このフォームが <%= pluralize(@user.errors.count, "エラー") %> あります.
+      このフォームが <%= @user.errors.count%>エラーあります.
     </div>
     <ul>
     <% @user.errors.full_messages.each do |msg| %>
