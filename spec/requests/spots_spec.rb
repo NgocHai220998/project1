@@ -3,7 +3,7 @@ include Capybara::RSpecMatchers
 
 RSpec.describe "Spots", type: :request do
   describe "GET /spots" do
-    let!(:spots){ FactoryBot.create_list(:spot, 31, :with_spot_review, :with_spot_schedule)}
+    let!(:spots){ FactoryBot.create_list(:spot, 31, :with_spot_review)}
 
     before(:each) do
       get root_path
@@ -67,90 +67,81 @@ RSpec.describe "Spots", type: :request do
     end
   end
 
-  describe "検索" do
+  describe '検索' do
+    subject do
+      get search_spots_path, params: { q: {
+        spot_schedules_start_on_gteq: spot_schedules_start_on_gteq,
+        spot_schedules_end_on_lteq: spot_schedules_end_on_lteq 
+      }}
+      response.body
+    end
+
+    let(:spot_schedules_start_on_gteq) { Time.zone.now - 1.day }
+    let(:spot_schedules_end_on_lteq) { Time.zone.now }
+
     let!(:spot1) do
-      spot = FactoryBot.create(:spot)
-      FactoryBot.create(:spot_schedule, start_on: Time.zone.now - 11.days, end_on: Time.zone.now - 5.days, spot: spot)
-      spot
+      FactoryBot.create(:spot, :with_spot_schedule, start_on: Time.zone.now - 11.days, end_on: Time.zone.now - 5.days)
     end
 
     let!(:spot2) do
-      spot = FactoryBot.create(:spot)
-      FactoryBot.create(:spot_schedule, start_on: Time.zone.now - 9.days, end_on: Time.zone.now - 4.days, spot: spot)
-      spot
+      FactoryBot.create(:spot, :with_spot_schedule, start_on: Time.zone.now - 9.days, end_on: Time.zone.now - 4.days)
     end
 
     let!(:spot3) do
-      spot = FactoryBot.create(:spot)
-      FactoryBot.create(:spot_schedule, start_on: Time.zone.now - 8.days, end_on: Time.zone.now - 3.days, spot: spot)
-      spot
+      FactoryBot.create(:spot, :with_spot_schedule, start_on: Time.zone.now - 8.days, end_on: Time.zone.now - 3.days)
     end
 
     let!(:spot4) do
-      spot = FactoryBot.create(:spot)
-      FactoryBot.create(:spot_schedule, start_on: Time.zone.now - 7.days, end_on: Time.zone.now - 2.days, spot: spot)
-      spot
+      FactoryBot.create(:spot, :with_spot_schedule, start_on: Time.zone.now - 7.days, end_on: Time.zone.now - 2.days)
     end
 
     let!(:spot5) do
-      spot = FactoryBot.create(:spot)
-      FactoryBot.create(:spot_schedule, start_on: Time.zone.now - 6.days, end_on: Time.zone.now, spot: spot)
-      spot
+      FactoryBot.create(:spot, :with_spot_schedule, start_on: Time.zone.now - 6.days, end_on: Time.zone.now)
     end
 
-    before(:each) do
-      get root_path
+    it '日付を指定することが表示されていること' do
+      is_expected.to have_selector('input#q_spot_schedules_start_on_gteq')
+      is_expected.to have_selector('input#q_spot_schedules_end_on_lteq')
     end
 
-    it "日付を指定することが表示されていること" do
-      expect(response.body).to have_selector("input#q_spot_schedules_start_on_gteq")
-      expect(response.body).to have_selector("input#q_spot_schedules_end_on_lteq")
+
+    context 'start_onが適当じゃない' do
+      let(:spot_schedules_start_on_gteq) { Time.zone.now }
+      let(:spot_schedules_end_on_lteq) { Time.zone.now + 7.days }
+    
+      it '検索結果が正しいこと' do
+        is_expected.not_to have_content(spot1.name)
+        is_expected.not_to have_content(spot2.name)
+        is_expected.not_to have_content(spot3.name)
+        is_expected.not_to have_content(spot4.name)
+        is_expected.not_to have_content(spot5.name)
+      end
     end
 
-    it "start_onが適当じゃない" do
-      params = {}
-      params[:q] = {"spot_schedules_start_on_gteq"=> Time.zone.now, "spot_schedules_end_on_lteq"=> Time.zone.now + 7.days}
+    context 'end_onが適当じゃない' do
+      let(:spot_schedules_start_on_gteq) { Time.zone.now - 9.days }
+      let(:spot_schedules_end_on_lteq) { Time.zone.now - 7.days }
 
-      get(search_spots_path, params: params)
-      expect(response.body).not_to have_content(spot1.name)
-      expect(response.body).not_to have_content(spot2.name)
-      expect(response.body).not_to have_content(spot3.name)
-      expect(response.body).not_to have_content(spot4.name)
-      expect(response.body).not_to have_content(spot5.name)
+      it '検索結果が正しいこと' do
+        is_expected.not_to have_content(spot1.name)
+        is_expected.not_to have_content(spot2.name)
+        is_expected.not_to have_content(spot3.name)
+        is_expected.not_to have_content(spot4.name)
+        is_expected.not_to have_content(spot5.name)
+      end
     end
 
-    it "end_onが適当じゃない" do
-      params = {}
-      params[:q] = {"spot_schedules_start_on_gteq"=> Time.zone.now - 9.days, "spot_schedules_end_on_lteq"=> Time.zone.now - 7.days}
-
-      get(search_spots_path, params: params)
-
-      expect(response.body).not_to have_content(spot1.name)
-      expect(response.body).not_to have_content(spot2.name)
-      expect(response.body).not_to have_content(spot3.name)
-      expect(response.body).not_to have_content(spot4.name)
-      expect(response.body).not_to have_content(spot5.name)
-    end
-
-    it "start_onとend_onが適当" do
-      params = {}
-      params[:q] = {"spot_schedules_start_on_gteq"=> Time.zone.now - 10.days, "spot_schedules_end_on_lteq"=> Time.zone.now - 1.days}
-
-      get(search_spots_path, params: params)
+    context 'start_onとend_onが適当' do
+      let(:spot_schedules_start_on_gteq) { Time.zone.now - 10.days }
+      let(:spot_schedules_end_on_lteq) { Time.zone.now - 1.days }
       
-      expect(response.body).not_to have_content(spot1.name)
-      expect(response.body).to have_content(spot2.name)
-      expect(response.body).to have_content(spot3.name)
-      expect(response.body).to have_content(spot4.name)
-      expect(response.body).not_to have_content(spot5.name)
-    end
-
-    it "検索した後、indexに移動する" do
-      params = {}
-      params[:q] = {"spot_schedules_start_on_gteq"=> Time.zone.now - rand(6..10).days, "spot_schedules_end_on_lteq"=> Time.zone.now - rand(1..5).days}
-
-      get(search_spots_path, params: params)
-      expect(response).to render_template('spots/index')
+      it '検索結果が正しいこと' do
+        is_expected.not_to have_content(spot1.name)
+        is_expected.not_to have_content(spot5.name)
+        is_expected.to have_content(spot2.name)
+        is_expected.to have_content(spot3.name)
+        is_expected.to have_content(spot4.name)
+      end
     end
   end
 end
