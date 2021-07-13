@@ -21,5 +21,10 @@ RSpec.describe Spot, type: :model do
       association = described_class.reflect_on_association(:tag)
       expect(association.macro).to eq :has_one
     end
+
+    it "should has many spot_schedule" do
+      association = described_class.reflect_on_association(:spot_schedules)
+      expect(association.macro).to eq :has_many
+    end
   end
 end

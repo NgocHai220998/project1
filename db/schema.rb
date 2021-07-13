@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_12_065734) do
+ActiveRecord::Schema.define(version: 2021_06_26_150825) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,6 +31,20 @@ ActiveRecord::Schema.define(version: 2021_03_12_065734) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["spot_id"], name: "index_spot_reviews_on_spot_id"
+  end
+
+  create_table "spot_schedules", force: :cascade do |t|
+    t.integer "kind"
+    t.integer "season"
+    t.datetime "start_on"
+    t.datetime "end_on"
+    t.string "day_of_week"
+    t.string "hour"
+    t.string "note"
+    t.bigint "spot_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["spot_id"], name: "index_spot_schedules_on_spot_id"
   end
 
   create_table "spot_tags", force: :cascade do |t|
@@ -64,5 +78,6 @@ ActiveRecord::Schema.define(version: 2021_03_12_065734) do
   end
 
   add_foreign_key "spot_reviews", "spots"
+  add_foreign_key "spot_schedules", "spots"
   add_foreign_key "spots", "prefectures"
 end

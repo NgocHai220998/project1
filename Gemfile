@@ -20,6 +20,7 @@ gem 'jbuilder', '~> 2.7'
 
 gem 'bootstrap4-kaminari-views', '~> 1.0.1'
 gem 'kaminari'
+gem 'ransack'
 
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'

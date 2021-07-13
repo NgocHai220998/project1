@@ -66,4 +66,82 @@ RSpec.describe "Spots", type: :request do
       end
     end
   end
+
+  describe '検索' do
+    subject do
+      get search_spots_path, params: { q: {
+        spot_schedules_start_on_gteq: spot_schedules_start_on_gteq,
+        spot_schedules_end_on_lteq: spot_schedules_end_on_lteq 
+      }}
+      response.body
+    end
+
+    let(:spot_schedules_start_on_gteq) { Time.zone.now - 1.day }
+    let(:spot_schedules_end_on_lteq) { Time.zone.now }
+
+    let!(:spot1) do
+      FactoryBot.create(:spot, :with_spot_schedule, start_on: Time.zone.now - 11.days, end_on: Time.zone.now - 5.days)
+    end
+
+    let!(:spot2) do
+      FactoryBot.create(:spot, :with_spot_schedule, start_on: Time.zone.now - 9.days, end_on: Time.zone.now - 4.days)
+    end
+
+    let!(:spot3) do
+      FactoryBot.create(:spot, :with_spot_schedule, start_on: Time.zone.now - 8.days, end_on: Time.zone.now - 3.days)
+    end
+
+    let!(:spot4) do
+      FactoryBot.create(:spot, :with_spot_schedule, start_on: Time.zone.now - 7.days, end_on: Time.zone.now - 2.days)
+    end
+
+    let!(:spot5) do
+      FactoryBot.create(:spot, :with_spot_schedule, start_on: Time.zone.now - 6.days, end_on: Time.zone.now)
+    end
+
+    it '日付を指定することが表示されていること' do
+      is_expected.to have_selector('input#q_spot_schedules_start_on_gteq')
+      is_expected.to have_selector('input#q_spot_schedules_end_on_lteq')
+    end
+
+
+    context 'start_onが適当じゃない' do
+      let(:spot_schedules_start_on_gteq) { Time.zone.now }
+      let(:spot_schedules_end_on_lteq) { Time.zone.now + 7.days }
+    
+      it '検索結果が正しいこと' do
+        is_expected.not_to have_content(spot1.name)
+        is_expected.not_to have_content(spot2.name)
+        is_expected.not_to have_content(spot3.name)
+        is_expected.not_to have_content(spot4.name)
+        is_expected.not_to have_content(spot5.name)
+      end
+    end
+
+    context 'end_onが適当じゃない' do
+      let(:spot_schedules_start_on_gteq) { Time.zone.now - 9.days }
+      let(:spot_schedules_end_on_lteq) { Time.zone.now - 7.days }
+
+      it '検索結果が正しいこと' do
+        is_expected.not_to have_content(spot1.name)
+        is_expected.not_to have_content(spot2.name)
+        is_expected.not_to have_content(spot3.name)
+        is_expected.not_to have_content(spot4.name)
+        is_expected.not_to have_content(spot5.name)
+      end
+    end
+
+    context 'start_onとend_onが適当' do
+      let(:spot_schedules_start_on_gteq) { Time.zone.now - 10.days }
+      let(:spot_schedules_end_on_lteq) { Time.zone.now - 1.days }
+      
+      it '検索結果が正しいこと' do
+        is_expected.not_to have_content(spot1.name)
+        is_expected.not_to have_content(spot5.name)
+        is_expected.to have_content(spot2.name)
+        is_expected.to have_content(spot3.name)
+        is_expected.to have_content(spot4.name)
+      end
+    end
+  end
 end
