@@ -8,8 +8,18 @@
   <%= f.label :prefecture_name_eq, "都道府県" %>
   <%= f.collection_select :prefecture_name_eq, Prefecture.all, :name, :name, {:include_blank => '設定なし'} %>
 
-  <%= f.label :tag_name_eq, "タグ" %>
-  <%= f.collection_select :tag_name_eq, Tag.all, :name, :name, {:include_blank => '設定なし'}, {:multiple => true} %>
+  <%= f.label :tag_name_in, "タグ" %>
+  <div class="tag-select-container">
+    <div class="tag-select-box">
+      <div class="multi-select">
+        <div class="select-item-placeholder">設定なし</div>
+      </div>
+      <div class="number-of-count hidden">
+        <span>... +4</span>
+      </div>
+    <%= f.collection_select :tag_name_in, Tag.all, :name, :name, {:include_blank => '設定なし'}, {:multiple => true, :class => "hidden"} %>
+    </div>
+  </div>
 
   <%= f.submit "検索" %>
 <% end %>
