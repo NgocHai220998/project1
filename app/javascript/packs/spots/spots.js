@@ -1,5 +1,5 @@
 document.addEventListener("turbolinks:load",function() {
-   x = document.getElementsByClassName("review-modal");
+  x = document.getElementsByClassName("review-modal");
 
   for(var i = 0; i<x.length; i++) {
     x[i].onclick = function () {
@@ -7,54 +7,62 @@ document.addEventListener("turbolinks:load",function() {
       recentReview.classList.toggle("hidden")
     };
   }
-});
 
-var tag_select = document.querySelector('#q_tag_name_in');
+  var tag_select = document.querySelector('#q_tag_name_in');
 
-let selectedValues = []
+  let selectedValues = []
 
-function handleSelect(selectedValue){
-  let elSelectBox = document.querySelector('.multi-select');
-  let selectedHTML = "";
+  function handleSelect(selectedValue){
+    let elSelectBox = document.querySelector('.multi-select');
+    let selectedHTML = "";
 
-  if (selectedValue && selectedValue.length > 2) {
-    document.querySelector(".number-of-count").classList.remove("hidden")
-    document.querySelector(".number-of-count span").innerHTML = `... +${selectedValue.length - 2}`
-  } else {
-    document.querySelector(".number-of-count").classList.add("hidden")
-  }
-  if (!selectedValues || (selectedValue && selectedValue.length === 0)) {
-    elSelectBox.innerHTML = `<div class="select-item-placeholder">設定なし</div>`
-  } else {
-    for(let i=0; i<selectedValue.length; i++) {
-      selectedHTML = selectedHTML + `<div class="select-item">${selectedValue[i]}</div>`
+    if (selectedValue && selectedValue.length > 2) {
+      document.querySelector(".number-of-count").classList.remove("hidden")
+      document.querySelector(".number-of-count span").innerHTML = `... +${selectedValue.length - 2}`
+    } else {
+      document.querySelector(".number-of-count").classList.add("hidden")
     }
-    elSelectBox.innerHTML = selectedHTML;
+    if (!selectedValues || (selectedValue && selectedValue.length === 0)) {
+      elSelectBox.innerHTML = `<div class="select-item-placeholder">設定なし</div>`
+    } else {
+      for(let i=0; i<selectedValue.length; i++) {
+        selectedHTML = selectedHTML + `<div class="select-item">${selectedValue[i]}</div>`
+      }
+      elSelectBox.innerHTML = selectedHTML;
+    }
   }
-}
 
-tag_select.addEventListener('change', (e) => { 
-  const options = e.target.options;
-  const newSelectedValues = [];
+  var elSelected = document.querySelectorAll('#q_tag_name_in option[selected=selected]')
 
-  for (let i = 0; i < options.length; i++) {
-    if (options[i].selected) {
-      newSelectedValues.push(options[i].value);
-      if(!options[i].value) {
-        selectedValues = null;
-        handleSelect(selectedValues);
-        return;
+  if (elSelected && elSelected.length > 0) {
+    for (let i = 0; i < elSelected.length; ++i) {
+      selectedValues.push(elSelected[i].innerText)
+    }
+    handleSelect(selectedValues);
+  }
+
+  tag_select.addEventListener('change', (e) => { 
+    const options = e.target.options;
+    const newSelectedValues = [];
+
+    for (let i = 0; i < options.length; i++) {
+      if (options[i].selected) {
+        newSelectedValues.push(options[i].value);
+        if(!options[i].value) {
+          selectedValues = null;
+          handleSelect(selectedValues);
+          return;
+        }
       }
     }
-  }
-  selectedValues = newSelectedValues
-  handleSelect(selectedValues);
-})
+    selectedValues = newSelectedValues
+    handleSelect(selectedValues);
+  })
 
-var options = Array.from(document.querySelectorAll("#q_tag_name_in option"));
+  var options = Array.from(document.querySelectorAll("#q_tag_name_in option"));
 
-options.forEach(function (element)
-{
+  options.forEach(function (element)
+  {
     element.addEventListener("mousedown", 
         function (e)
         {
@@ -68,10 +76,11 @@ options.forEach(function (element)
         }
         , false
     );
+  });
+
+  var multi_select = document.querySelector(".multi-select");
+
+  multi_select.onclick = function (){
+    document.querySelector("#q_tag_name_in").classList.toggle("hidden");
+  };
 });
-
-var multi_select = document.querySelector(".multi-select");
-
-multi_select.onclick = function (){
-  document.querySelector("#q_tag_name_in").classList.toggle("hidden");
-};
