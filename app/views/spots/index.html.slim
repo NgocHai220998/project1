@@ -1,0 +1,63 @@
+= search_form_for @q, url: search_spots_path, html: {method: :get} do |f|
+  = f.label :spot_schedules_start_on_gteq, '開始日'
+  = f.date_field :spot_schedules_start_on_gteq
+
+  = f.label :spot_schedules_end_on_lteq, '終了日'
+  = f.date_field :spot_schedules_end_on_lteq
+
+  = f.label :prefecture_name_eq, '都道府県'
+  = f.collection_select :prefecture_name_eq, Prefecture.all, :name, :name, {:include_blank => '設定なし'}
+
+  = f.label :tag_name_in, 'タグ'
+  .tag-select-container
+
+    .tag-select-box
+
+      .multi-select
+
+        .select-item-placeholder
+          | 設定なし
+      .number-of-count.hidden
+        span
+          | ... 4
+      = f.collection_select :tag_name_in, Tag.all, :name, :name, {:include_blank => '設定なし'}, {:multiple => true, :class => "hidden"}
+
+  = f.submit '検索'
+
+table.table.table-striped.mt-3
+  thead
+    tr
+      th
+        | #
+      th
+        | スポット名
+      th
+        | スポット説明
+      th
+        | 都道府県名
+      th
+        | タグ
+      th
+        | reviewの総数
+  tbody
+    - @spots.each.with_index(1) do |spot, index|
+      tr.table-info
+
+        th[scope="row"]
+          = index
+        td
+          = spot.name
+        td
+          = spot.body.truncate(30)
+        td
+          = spot.prefecture.name
+        td
+          = spot.spot_tag.tag.name
+        td.review-modal data-id="#{spot.id}"
+          = spot.spot_reviews_count
+
+      tr.recent-review.hidden id="spot-#{spot.id}"
+        th colspan="6"
+          div id="spot-review-#{spot.id}"
+            = render 'spots/modal', spot: spot
+= paginate @spots, theme: "twitter-bootstrap-4"

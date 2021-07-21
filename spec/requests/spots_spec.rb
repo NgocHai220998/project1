@@ -71,13 +71,17 @@ RSpec.describe "Spots", type: :request do
     subject do
       get search_spots_path, params: { q: {
         spot_schedules_start_on_gteq: spot_schedules_start_on_gteq,
-        spot_schedules_end_on_lteq: spot_schedules_end_on_lteq 
+        spot_schedules_end_on_lteq: spot_schedules_end_on_lteq,
+        prefecture_name_eq: prefecture_name_eq,
+        tag_name_in: tag_name_in
       }}
       response.body
     end
 
-    let(:spot_schedules_start_on_gteq) { Time.zone.now - 1.day }
-    let(:spot_schedules_end_on_lteq) { Time.zone.now }
+    let(:spot_schedules_start_on_gteq) {}
+    let(:spot_schedules_end_on_lteq) {}
+    let(:prefecture_name_eq) {}
+    let(:tag_name_in) {}
 
     let!(:spot1) do
       FactoryBot.create(:spot, :with_spot_schedule, start_on: Time.zone.now - 11.days, end_on: Time.zone.now - 5.days)
@@ -99,11 +103,12 @@ RSpec.describe "Spots", type: :request do
       FactoryBot.create(:spot, :with_spot_schedule, start_on: Time.zone.now - 6.days, end_on: Time.zone.now)
     end
 
-    it '日付を指定することが表示されていること' do
+    it '日付とタグと都道府県を指定することが表示されていること' do
       is_expected.to have_selector('input#q_spot_schedules_start_on_gteq')
       is_expected.to have_selector('input#q_spot_schedules_end_on_lteq')
+      is_expected.to have_selector("select#q_prefecture_name_eq")
+      is_expected.to have_selector("select#q_tag_name_in")
     end
-
 
     context 'start_onが適当じゃない' do
       let(:spot_schedules_start_on_gteq) { Time.zone.now }
@@ -141,6 +146,42 @@ RSpec.describe "Spots", type: :request do
         is_expected.to have_content(spot2.name)
         is_expected.to have_content(spot3.name)
         is_expected.to have_content(spot4.name)
+      end
+    end
+
+    context '都道府県名が適当' do
+      let(:prefecture_name_eq) {spot1.prefecture.name}
+
+      it '検索結果が正しいこと' do
+        is_expected.not_to have_content(spot2.name)
+        is_expected.not_to have_content(spot3.name)
+        is_expected.not_to have_content(spot4.name)
+        is_expected.not_to have_content(spot5.name)
+        is_expected.to have_content(spot1.name)
+      end
+    end
+
+    context 'タグが適当' do
+      let(:tag_name_in) {spot2.tag.name}
+
+      it '検索結果が正しいこと' do
+        is_expected.not_to have_content(spot1.name)
+        is_expected.not_to have_content(spot3.name)
+        is_expected.not_to have_content(spot4.name)
+        is_expected.not_to have_content(spot5.name)
+        is_expected.to have_content(spot2.name)
+      end
+    end
+
+    context 'タグが2つが適当' do
+      let(:tag_name_in) {[spot1.tag.name, spot2.tag.name]}
+
+      it '検索結果が正しいこと' do
+        is_expected.not_to have_content(spot3.name)
+        is_expected.not_to have_content(spot4.name)
+        is_expected.not_to have_content(spot5.name)
+        is_expected.to have_content(spot1.name)
+        is_expected.to have_content(spot2.name)
       end
     end
   end
