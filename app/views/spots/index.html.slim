@@ -1,14 +1,14 @@
 = search_form_for @q, url: search_spots_path, html: {method: :get} do |f|
-  = f.label :spot_schedules_start_on_gteq, "開始日"
+  = f.label :spot_schedules_start_on_gteq, '開始日'
   = f.date_field :spot_schedules_start_on_gteq
 
-  = f.label :spot_schedules_end_on_lteq, "終了日"
+  = f.label :spot_schedules_end_on_lteq, '終了日'
   = f.date_field :spot_schedules_end_on_lteq
 
-  = f.label :prefecture_name_eq, "都道府県"
+  = f.label :prefecture_name_eq, '都道府県'
   = f.collection_select :prefecture_name_eq, Prefecture.all, :name, :name, {:include_blank => '設定なし'}
 
-  = f.label :tag_name_in, "タグ"
+  = f.label :tag_name_in, 'タグ'
   .tag-select-container
 
     .tag-select-box
@@ -22,7 +22,7 @@
           | ... 4
       = f.collection_select :tag_name_in, Tag.all, :name, :name, {:include_blank => '設定なし'}, {:multiple => true, :class => "hidden"}
 
-  = f.submit "検索"
+  = f.submit '検索'
 
 table.table.table-striped.mt-3
   thead
