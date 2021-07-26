@@ -6,16 +6,13 @@
   box-sizing: border-box;
 }
 
-input, textarea, select, .uneditable-input {
+#user_email, #user_nickname, #user_password, #user_password_confirmation {
   border: 1px solid #bbb;
   width: 100%;
   margin-bottom: 15px;
-  @include box_sizing;
-}
-
-input {
   height: 40px;
   border-radius: 10px;
+  @include box_sizing;
 }
 
 h1 {
