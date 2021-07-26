@@ -8,6 +8,9 @@
   = f.label :prefecture_name_eq, '都道府県'
   = f.collection_select :prefecture_name_eq, Prefecture.all, :name, :name, {:include_blank => '設定なし'}
 
+  = f.label :spot_reviews_count_gt, 'レビュー数'
+  = f.collection_select :spot_reviews_count_gt, [10,20,30,40,50], :to_i, :to_i, {:include_blank => '設定なし'}
+
   = f.label :tag_name_in, 'タグ'
   .tag-select-container
 

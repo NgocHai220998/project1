@@ -73,7 +73,8 @@ RSpec.describe "Spots", type: :request do
         spot_schedules_start_on_gteq: spot_schedules_start_on_gteq,
         spot_schedules_end_on_lteq: spot_schedules_end_on_lteq,
         prefecture_name_eq: prefecture_name_eq,
-        tag_name_in: tag_name_in
+        tag_name_in: tag_name_in,
+        spot_reviews_count_gt: spot_reviews_count_gt
       }}
       response.body
     end
@@ -82,25 +83,26 @@ RSpec.describe "Spots", type: :request do
     let(:spot_schedules_end_on_lteq) {}
     let(:prefecture_name_eq) {}
     let(:tag_name_in) {}
+    let(:spot_reviews_count_gt) {}
 
     let!(:spot1) do
-      FactoryBot.create(:spot, :with_spot_schedule, start_on: Time.zone.now - 11.days, end_on: Time.zone.now - 5.days)
+      FactoryBot.create(:spot, :with_spot_review, :with_spot_schedule, reviews_count: 2, start_on: Time.zone.now - 11.days, end_on: Time.zone.now - 5.days)
     end
 
     let!(:spot2) do
-      FactoryBot.create(:spot, :with_spot_schedule, start_on: Time.zone.now - 9.days, end_on: Time.zone.now - 4.days)
+      FactoryBot.create(:spot, :with_spot_review, :with_spot_schedule, reviews_count: 10, start_on: Time.zone.now - 9.days, end_on: Time.zone.now - 4.days)
     end
 
     let!(:spot3) do
-      FactoryBot.create(:spot, :with_spot_schedule, start_on: Time.zone.now - 8.days, end_on: Time.zone.now - 3.days)
+      FactoryBot.create(:spot, :with_spot_review, :with_spot_schedule, reviews_count: 15, start_on: Time.zone.now - 8.days, end_on: Time.zone.now - 3.days)
     end
 
     let!(:spot4) do
-      FactoryBot.create(:spot, :with_spot_schedule, start_on: Time.zone.now - 7.days, end_on: Time.zone.now - 2.days)
+      FactoryBot.create(:spot, :with_spot_review, :with_spot_schedule, reviews_count: 21, start_on: Time.zone.now - 7.days, end_on: Time.zone.now - 2.days)
     end
 
     let!(:spot5) do
-      FactoryBot.create(:spot, :with_spot_schedule, start_on: Time.zone.now - 6.days, end_on: Time.zone.now)
+      FactoryBot.create(:spot, :with_spot_review, :with_spot_schedule, reviews_count: 6, start_on: Time.zone.now - 6.days, end_on: Time.zone.now)
     end
 
     it '日付とタグと都道府県を指定することが表示されていること' do
@@ -182,6 +184,18 @@ RSpec.describe "Spots", type: :request do
         is_expected.not_to have_content(spot5.name)
         is_expected.to have_content(spot1.name)
         is_expected.to have_content(spot2.name)
+      end
+    end
+
+    context 'レビュー数が適当' do
+      let(:spot_reviews_count_gt) { 10 }
+      
+      it '検索結果が正しいこと' do
+        is_expected.not_to have_content(spot1.name)
+        is_expected.not_to have_content(spot2.name)
+        is_expected.not_to have_content(spot5.name)
+        is_expected.to have_content(spot3.name)
+        is_expected.to have_content(spot4.name)
       end
     end
   end
