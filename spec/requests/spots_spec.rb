@@ -188,7 +188,7 @@ RSpec.describe "Spots", type: :request do
     end
 
     context 'レビュー数が適当' do
-      let(:spot_reviews_count_gt) {10}
+      let(:spot_reviews_count_gt) { 10 }
       
       it '検索結果が正しいこと' do
         is_expected.not_to have_content(spot1.name)

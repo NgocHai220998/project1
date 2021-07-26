@@ -7,7 +7,6 @@ FactoryBot.define do
     
     trait :with_spot_schedule do
       transient do
-        reviews_count {5}
         start_on { Time.zone.now - rand(11..30).days }
         end_on { Time.zone.now - rand(1..10).days }
       end
@@ -19,7 +18,7 @@ FactoryBot.define do
 
     trait :with_spot_review do
       transient do
-        reviews_count {5}
+        reviews_count { 5 }
       end
 
       after(:build) do |spot, evaluator|
