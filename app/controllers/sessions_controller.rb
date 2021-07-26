@@ -7,7 +7,7 @@ class SessionsController < ApplicationController
 
     if user&.authenticate(params[:session][:password])
       log_in user
-      if params[:session][:remember_me] == '1'
+      if params[:session][:remember_me] == '1'
         remember user
       else
         forget user
