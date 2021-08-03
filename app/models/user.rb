@@ -9,10 +9,10 @@ class User < ApplicationRecord
   validates :email, presence: true, length: { maximum: 255 }, format: { with: VALID_EMAIL_REGEX }, uniqueness: true
   validates :nickname, presence: true, length: { maximum: 50 }, uniqueness: true
 
+  validates :password, length: { minimum: 12 }, format: { with: VALID_PASSWORD_REGEX,
+                                                          message: 'は英数字大文字小文字が1文字以上、長さは12文字以上含む必要があります' }
+
   has_secure_password
-  validates :password, presence: true, length: { minimum: 12 }, format: { with: VALID_PASSWORD_REGEX,
-                                                                          message: '英数字大文字小文字が1文字以上、
-                                                                          長さは12文字以上含む必要があります' }
 
   private
 

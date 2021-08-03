@@ -1,2 +1,0 @@
-      invoke  active_record
-      create    db/migrate/20210726115039_add_index_to_users.rb

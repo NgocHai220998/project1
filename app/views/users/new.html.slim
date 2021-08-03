@@ -3,7 +3,7 @@ h1 会員登録
   = form_for(@user) do |f|
     = render 'shared/error_messages'
 
-    = f.label :email, "Email"
+    = f.label :email, "メール"
     = f.email_field :email
 
     = f.label :nickname, "ニックネーム"

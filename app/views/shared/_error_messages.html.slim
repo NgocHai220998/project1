@@ -1,7 +1,7 @@
 - if @user.errors.any?
   #error_explanation
     .alert.alert-danger
-      | このフォームが #{@user.errors.count}エラーあります.
+      | このフォームが#{@user.errors.count}エラーあります.
     ul
       - @user.errors.full_messages.each do |msg|
         li= msg

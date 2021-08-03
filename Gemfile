@@ -20,6 +20,7 @@ gem 'jbuilder', '~> 2.7'
 
 gem 'bootstrap4-kaminari-views', '~> 1.0.1'
 gem 'kaminari'
+gem 'rails-i18n'
 gem 'ransack'
 gem 'slim-rails'
 

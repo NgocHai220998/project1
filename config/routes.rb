@@ -1,13 +1,15 @@
 Rails.application.routes.draw do
-  root 'spots#index'
+  scope "(:locale)", locale: /ja|en/ do
+    root 'spots#index'
 
-  resources :spots do
-    collection do
-      match 'search' => 'spots#search', via: [:get, :post], as: :search
+    resources :spots do
+      collection do
+        match 'search' => 'spots#search', via: [:get, :post], as: :search
+      end
     end
-  end
-  
-  get '/signup', to: 'users#new'
+    
+    get '/signup', to: 'users#new'
 
-  resources :users
+    resources :users
+  end
 end
