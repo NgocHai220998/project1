@@ -1,0 +1,18 @@
+h1 会員登録
+.sign-up-form
+  = form_for(@user) do |f|
+    = render 'shared/error_messages'
+
+    = f.label :email, "メール"
+    = f.email_field :email
+
+    = f.label :nickname, "ニックネーム"
+    = f.text_field :nickname
+
+    = f.label :password, "パスワード"
+    = f.password_field :password
+
+    = f.label :password_confirmation, "確認パスワード"
+    = f.password_field :password_confirmation
+
+    = f.submit "作成する", class: "btn btn-primary sign-up-button"

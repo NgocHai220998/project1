@@ -1,0 +1,33 @@
+/* forms */
+
+@mixin box_sizing {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+#user_email, #user_nickname, #user_password, #user_password_confirmation {
+  border: 1px solid #bbb;
+  width: 100%;
+  margin-bottom: 15px;
+  height: 40px;
+  border-radius: 10px;
+  @include box_sizing;
+}
+
+h1 {
+  font-size: 3em;
+  letter-spacing: -2px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.sign-up-form {
+  margin: auto;
+  width: 50%;
+  padding: 10px;
+}
+
+.sign-up-button, label {
+  margin-top: 15px;
+}
