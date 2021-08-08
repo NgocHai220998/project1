@@ -1,0 +1,31 @@
+.d-flex {
+  width: 100%;
+}
+
+.p-2:hover>.dropdown,
+.p-2 .dropdown:hover {
+  visibility: visible;
+  opacity: 1;
+  display: block;
+}
+
+.dropdown {
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  transition: all 0.5s ease;
+  margin-top: 1rem;
+  left: 0;
+  display: none;
+}
+
+.drop-item {
+  display: block;
+  transition-duration: 0.5s;
+  clear: both;
+  width: 100%;
+}
+
+.drop-item:hover {
+  cursor: pointer;
+}

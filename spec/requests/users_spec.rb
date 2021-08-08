@@ -132,4 +132,117 @@ RSpec.describe "Users", type: :request do
       end
     end
   end
+
+  describe "編集" do
+    let!(:user1) do
+      user = FactoryBot.create(:user, email: "user10@gmail.com", nickname: "user10", password: "User1234567890", password_confirmation: "User1234567890")
+    end
+
+    let!(:user2) do
+      user = FactoryBot.create(:user, email: "user2@gmail.com", nickname: "user2", password: "User1234567890", password_confirmation: "User1234567890")
+    end
+
+    before(:each) do
+      post login_path, params: {session: {
+        email: user1.email,
+        password: user1.password
+      }}
+    end
+
+    it "ログインができること" do
+      expect(response).to have_http_status(302)
+    end
+
+    subject do
+      patch user_path(user1.id), params: {user: {
+        nickname: nickname,
+        password: password,
+        password_confirmation: password_confirmation
+      }}
+      response.body
+    end
+
+    let(:id) {}
+    let(:nickname) {}
+    let(:password) {}
+    let(:password_confirmation) {}
+
+    context "使われているニックネームには変更出来ない" do
+      let(:nickname) {"user2"}
+      let(:password) {"User1234567890"}
+      let(:password_confirmation) {"User1234567890"}
+
+      it "結果が正しいこと" do
+        is_expected.to render_template('shared/_error_messages')
+        is_expected.to have_content("ニックネームはすでに存在します")
+        is_expected.to render_template('users/edit')
+      end
+    end
+
+    context "パスワードが大文字なし" do
+      let(:password) {"user1234567890"}
+      let(:password_confirmation) {"user1234567890"}
+
+      it "結果が正しいこと" do
+        is_expected.to render_template('shared/_error_messages')
+        is_expected.to have_content("パスワードは英数字大文字小文字が1文字以上、長さは12文字以上含む必要があります")
+        is_expected.to render_template('users/edit')
+      end
+    end
+
+    context "パスワードが小文字なし" do
+      let(:password) {"USER1234567890"}
+      let(:password_confirmation) {"USER1234567890"}
+
+      it "結果が正しいこと" do
+        is_expected.to render_template('shared/_error_messages')
+        is_expected.to have_content("パスワードは英数字大文字小文字が1文字以上、長さは12文字以上含む必要があります")
+        is_expected.to render_template('users/edit')
+      end
+    end
+
+    context "パスワードが英数字なし" do
+      let(:password) {"userUserUser"}
+      let(:password_confirmation) {"userUserUser"}
+
+      it "結果が正しいこと" do
+        is_expected.to render_template('shared/_error_messages')
+        is_expected.to have_content("パスワードは英数字大文字小文字が1文字以上、長さは12文字以上含む必要があります")
+        is_expected.to render_template('users/edit')
+      end
+    end
+
+    context "パスワードの長さが条件を満たない" do
+      let(:password) {"user123"}
+      let(:password_confirmation) {"user123"}
+
+      it "結果が正しいこと" do
+        is_expected.to render_template('shared/_error_messages')
+        is_expected.to have_content("パスワードは12文字以上で入力してください")
+        is_expected.to render_template('users/edit')
+      end
+    end
+
+    context "パスワードと確認パスワードが違い" do
+      let(:password) {"user123567890"}
+      let(:password_confirmation) {"user4561237890"}
+
+      it "結果が正しいこと" do 
+        is_expected.to render_template('shared/_error_messages')
+        is_expected.to have_content("確認パスワードとパスワードの入力が一致しません")
+        is_expected.to render_template('users/edit')
+      end
+    end
+
+    context "編集成功" do
+      let(:nickname) {"user1"}
+      let(:password) {"User0123456789"}
+      let(:password_confirmation) {"User0123456789"}
+
+      it "結果が正しいこと" do
+        is_expected.to redirect_to(user1)
+      end
+    end
+
+  end
 end

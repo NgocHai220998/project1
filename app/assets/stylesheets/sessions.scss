@@ -17,10 +17,19 @@ section {
   overflow: auto;
 }
 
-.row {
-  text-align: center;
+.form-login {
+  display: inline-block;
+  width: 75%;
+  margin-left: 100px;
+  margin-right: 100px;
 }
 
-form {
-  display: inline-block;
+.login-button {
+  margin-top: 5rem;
+  margin-left: 125px;
+  margin-right: 125px;
+}
+
+p {
+  text-align: center;
 }

@@ -30,6 +30,12 @@ Style/Documentation:
 Style/FrozenStringLiteralComment:
   Enabled: false
 
+Rails/HelperInstanceVariable:
+  Enabled: false
+
+Lint/AssignmentInCondition:
+  Enabled: false
+
 Metrics/BlockLength:
   Exclude:
     - 'Rakefile'

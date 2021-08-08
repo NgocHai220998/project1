@@ -9,5 +9,7 @@ html
     link[rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"]
   body
     = render 'layouts/header'
+    - flash.each do |message_type, message|
+      div class=("alert alert-#{message_type}") id="flash" = message
     = yield
     = javascript_pack_tag 'application', 'data-turbolinks-track': 'reload', 'data-turbolinks-suppress-warning': 'true'
