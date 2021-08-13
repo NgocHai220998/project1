@@ -4,7 +4,9 @@ FactoryBot.define do
     tag
     sequence(:name) { |n| "#{n}原生花園" }
     sequence(:body) { |n| "#{n}厚岸海岸チンベの鼻一帯の台地上に，野性のヒオウギアヤメ厚岸海岸チンベの鼻一帯の台地上に，野性のヒオウギアヤメ"}
-    
+    sequence(:wifi) { "有" }
+    sequence(:building) { "エアコン" }
+
     trait :with_spot_schedule do
       transient do
         start_on { Time.zone.now - rand(11..30).days }

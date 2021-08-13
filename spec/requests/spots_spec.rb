@@ -208,4 +208,54 @@ RSpec.describe "Spots", type: :request do
       end
     end
   end
+
+  describe '詳細' do
+    let!(:spot1) do
+      FactoryBot.create(:spot, :with_spot_review, :with_spot_schedule, reviews_count: 6, start_on: Time.zone.now - 7.days, end_on: Time.zone.now - 2.days)
+    end
+
+    before(:each) do
+      get root_path
+      get spot_path(spot1.id), params: {id: spot1.id}
+    end
+
+    it "リクエストが成功すること" do
+      expect(response).to have_http_status(200)
+    end
+
+    it "spotの名前が表示されていること" do
+      expect(response.body).to include(spot1.name)
+    end
+
+    it "spotのbodyが表示されていること" do
+      expect(response.body).to include(spot1.body)
+    end
+
+    it "spotのwifiが表示されていること" do
+      expect(response.body).to include(spot1.wifi)
+    end
+
+    it "prefectureの名前が表示されていること" do
+      expect(response.body).to include(spot1.prefecture.name)
+    end
+
+    it "tag_nameが表示されていること" do
+      expect(response.body).to include(spot1.spot_tag.tag.name)
+    end
+
+    it "スポット設備が表示されていること" do
+      expect(response.body).to include(spot1.building)
+    end
+
+    it "レビュー全部が表示されていること" do
+      expect(response.body).to have_content(spot1.spot_reviews_count)
+    end
+
+    it "レビューの内容が表示されていること" do
+      (0... spot1.spot_reviews_count - 1).each do |i|
+        expect(response.body).to have_content(spot1.spot_reviews[i].comment)
+        expect(response.body).to have_content(spot1.spot_reviews[i].posted_at)
+      end
+    end
+  end
 end
