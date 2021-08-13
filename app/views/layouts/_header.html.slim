@@ -1,0 +1,13 @@
+header.navbar.navbar-fixed-top.navbar-inverse
+  .container
+    .d-flex.flex-row-reverse
+      - if logged_in?
+        .p-2
+          a href="#" アカウント
+          .dropdown
+            .drop-item = link_to "プロフィール", current_user
+            .drop-item= link_to "設定", edit_user_path(current_user)
+            .drop-item= link_to "ログアウト", logout_path, method: :delete
+      - else
+        .p-2= link_to "ログイン", login_path
+      .p-2= link_to "ホーム", root_path
