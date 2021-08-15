@@ -1,0 +1,21 @@
+tbody#spots
+    - @spots.each.with_index(1) do |spot, index|
+      tr.table-info
+
+        th[scope="row"]
+          = index
+        td
+          = spot.name
+        td
+          = spot.body.truncate(30)
+        td
+          = spot.prefecture.name
+        td
+          = spot.spot_tag.tag.name
+        td.review-modal data-id="#{spot.id}"
+          = spot.spot_reviews_count
+
+      tr.recent-review.hidden id="spot-#{spot.id}"
+        th colspan="6"
+          div id="spot-review-#{spot.id}"
+            = render 'spots/modal', spot: spot
