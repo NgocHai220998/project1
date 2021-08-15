@@ -1,0 +1,11 @@
+= form_with url: spot_reviews_path do |f|
+  .form-group
+    = f.label :comment
+    = f.text_area :comment, class: 'form-control'
+  - if logged_in?
+    = f.hidden_field :user_id, value: current_user.id
+    = f.hidden_field :spot_id, value: @spot.id
+    = f.submit "レビューを追加", class: 'btn btn-primary'
+  - else
+    = link_to "ログイン", login_path
+    h4 まだログインしないので、ログインしてください

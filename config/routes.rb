@@ -15,5 +15,8 @@ Rails.application.routes.draw do
     get '/login', to: 'sessions#new'
     post '/login', to: 'sessions#create'
     delete '/logout', to: 'sessions#destroy'
+
+    resources :spot_reviews
+    get '/spot_reviews/new', to: 'spot_reviews#new'
   end
 end

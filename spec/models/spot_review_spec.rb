@@ -6,5 +6,10 @@ RSpec.describe SpotReview, type: :model do
       association = described_class.reflect_on_association(:spot)
       expect(association.macro).to eq :belongs_to
     end
+
+    it "should belongs to user" do
+      association = described_class.reflect_on_association(:user)
+      expect(association.macro).to eq :belongs_to
+    end
   end
 end

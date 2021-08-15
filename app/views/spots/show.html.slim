@@ -42,6 +42,8 @@
       | レビュー全部: #{@spot.spot_reviews_count}
   .review-detail.col-md-6
     h3 Review
-    - @spot.spot_reviews.each do |spot_review|
+    - @spot.spot_reviews.each.with_index(1) do |spot_review, index|
       div= spot_review.comment
       .posted_at= spot_review.posted_at
+.review-comment.col-md-6
+  = render :file => '/spot_reviews/new'
