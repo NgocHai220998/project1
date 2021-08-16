@@ -1,13 +1,22 @@
+<<<<<<< HEAD
 = form_with url: spot_reviews_path do |f|
+=======
+= form_with url: spot_reviews_path, remote: true do |f|
+>>>>>>> kadai12
   .form-group
     = f.label :comment
     = f.text_area :comment, class: 'form-control'
   - if logged_in?
+<<<<<<< HEAD
+=======
+    = f.hidden_field :user_id, value: current_user.id
+>>>>>>> kadai12
     = f.hidden_field :spot_id, value: @spot.id
     = f.submit "レビューを追加", class: 'btn btn-primary'
   - else
     = link_to "ログイン", login_path
     h4 まだログインしないので、ログインしてください
+<<<<<<< HEAD
 
   - if @spot_review && @spot_review.errors.any?
     #error_explanation
@@ -16,3 +25,5 @@
       ul
         - @spot_review.errors.full_messages.each do |msg|
           li= msg 
+=======
+>>>>>>> kadai12
