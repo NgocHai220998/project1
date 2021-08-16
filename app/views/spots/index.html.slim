@@ -42,5 +42,6 @@ table.table.table-striped.mt-3
         | タグ
       th
         | reviewの総数
-  = render 'spots/spot'
+  tbody#spots
+    = render 'spots/spot'
 = paginate @spots, remote: true, theme: "twitter-bootstrap-4"

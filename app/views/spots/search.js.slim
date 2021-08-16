@@ -1,6 +1,6 @@
-| document.querySelector("#spots").innerHTML = "#{j render(@spots)}";
+| document.querySelector("#spots").innerHTML = "#{j render partial: 'spots/spot', locals: { spots: @spots }}";
 
-| document.querySelector(".pagination").innerHTML = "#{j paginate(@spots, remote: true)}";
+| document.querySelector(".pagination").innerHTML = "#{j paginate(@spots, remote: true, theme: "twitter-bootstrap-4")}";
 
 | x = document.getElementsByClassName("review-modal");
 

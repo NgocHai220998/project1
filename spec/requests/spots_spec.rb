@@ -56,6 +56,13 @@ RSpec.describe "Spots", type: :request do
       end
     end
 
+    it '日付とタグと都道府県を指定することが表示されていること' do
+      expect(response.body).to have_selector('input#q_spot_schedules_start_on_gteq')
+      expect(response.body).to have_selector('input#q_spot_schedules_end_on_lteq')
+      expect(response.body).to have_selector("select#q_prefecture_name_eq")
+      expect(response.body).to have_selector("select#q_tag_name_in")
+    end
+
     it "レビューのコメントが20字以内で表示されていること" do
       (0... SpotsController::SPOT_LIMIT - 1).each do |i|
         spots[i].spot_reviews.first(3).each do |recent_review|
@@ -84,7 +91,7 @@ RSpec.describe "Spots", type: :request do
         prefecture_name_eq: prefecture_name_eq,
         tag_name_in: tag_name_in,
         spot_reviews_count_gt: spot_reviews_count_gt
-      }}
+      }}, xhr: true
       response.body
     end
 
@@ -112,13 +119,6 @@ RSpec.describe "Spots", type: :request do
 
     let!(:spot5) do
       FactoryBot.create(:spot, :with_spot_review, :with_spot_schedule, reviews_count: 6, start_on: Time.zone.now - 6.days, end_on: Time.zone.now)
-    end
-
-    it '日付とタグと都道府県を指定することが表示されていること' do
-      is_expected.to have_selector('input#q_spot_schedules_start_on_gteq')
-      is_expected.to have_selector('input#q_spot_schedules_end_on_lteq')
-      is_expected.to have_selector("select#q_prefecture_name_eq")
-      is_expected.to have_selector("select#q_tag_name_in")
     end
 
     context 'start_onが適当じゃない' do
