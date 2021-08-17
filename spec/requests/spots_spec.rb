@@ -260,7 +260,6 @@ RSpec.describe "Spots", type: :request do
     it "レビューの内容が表示されていること" do
       (0... spot1.spot_reviews_count - 1).each do |i|
         expect(response.body).to have_content(spot1.spot_reviews[i].comment)
-        expect(response.body).to have_content(spot1.spot_reviews[i].posted_at)
       end
     end
   end
