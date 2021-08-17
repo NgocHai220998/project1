@@ -211,7 +211,7 @@ RSpec.describe "Spots", type: :request do
 
   describe '詳細' do
     let!(:spot1) do
-      FactoryBot.create(:spot, :with_spot_review, :with_spot_schedule, reviews_count: 6, start_on: Time.zone.now - 7.days, end_on: Time.zone.now - 2.days)
+      FactoryBot.create(:spot, :with_spot_review, :with_spot_schedule, :with_spot_equipment, reviews_count: 6, start_on: Time.zone.now - 7.days, end_on: Time.zone.now - 2.days, equipment_count: 2)
     end
 
     before(:each) do
@@ -231,6 +231,10 @@ RSpec.describe "Spots", type: :request do
       expect(response.body).to include(spot1.body)
     end
 
+    it "restroom_qtyの名前が表示されていること" do
+      expect(response.body).to include(spot1.restroom_qty)
+    end
+
     it "spotのwifiが表示されていること" do
       expect(response.body).to include(spot1.wifi)
     end
@@ -243,8 +247,10 @@ RSpec.describe "Spots", type: :request do
       expect(response.body).to include(spot1.spot_tag.tag.name)
     end
 
-    it "スポット設備が表示されていること" do
-      expect(response.body).to include(spot1.building)
+    it "spot_equipmentが表示されていること" do
+      spot1.spot_equipments.each do |spot_equipment|
+        expect(response.body).to include(spot_equipment.name)
+      end
     end
 
     it "レビュー全部が表示されていること" do

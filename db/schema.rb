@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_06_101303) do
+ActiveRecord::Schema.define(version: 2021_08_17_145456) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,6 +20,16 @@ ActiveRecord::Schema.define(version: 2021_08_06_101303) do
     t.string "name_spoken"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "spot_equipments", force: :cascade do |t|
+    t.string "qty"
+    t.string "note"
+    t.string "name"
+    t.bigint "spot_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["spot_id"], name: "index_spot_equipments_on_spot_id"
   end
 
   create_table "spot_reviews", force: :cascade do |t|
@@ -88,6 +98,7 @@ ActiveRecord::Schema.define(version: 2021_08_06_101303) do
     t.index ["nickname"], name: "index_users_on_nickname", unique: true
   end
 
+  add_foreign_key "spot_equipments", "spots"
   add_foreign_key "spot_reviews", "spots"
   add_foreign_key "spot_schedules", "spots"
   add_foreign_key "spots", "prefectures"
