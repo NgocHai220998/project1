@@ -231,14 +231,6 @@ RSpec.describe "Spots", type: :request do
       expect(response.body).to include(spot1.body)
     end
 
-    it "restroom_qtyの名前が表示されていること" do
-      expect(response.body).to include(spot1.restroom_qty)
-    end
-
-    it "spotのwifiが表示されていること" do
-      expect(response.body).to include(spot1.wifi)
-    end
-
     it "prefectureの名前が表示されていること" do
       expect(response.body).to include(spot1.prefecture.name)
     end
@@ -250,6 +242,8 @@ RSpec.describe "Spots", type: :request do
     it "spot_equipmentが表示されていること" do
       spot1.spot_equipments.each do |spot_equipment|
         expect(response.body).to include(spot_equipment.name)
+        expect(response.body).to include(spot_equipment.qty)
+        expect(response.body).to include(spot_equipment.note)
       end
     end
 

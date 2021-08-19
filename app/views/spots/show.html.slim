@@ -6,33 +6,42 @@
     div
       | スポット説明: #{@spot.body}
     div
-      | トイレの数: 
-      - if @spot.restroom_qty == nil
-        | 0
-      - else
-        = @spot.restroom_qty
+      | トイレの数: #{@spot.restroom_qty_status}
     div
-      | wifi有無: 
-      - if @spot.wifi == nil
-        | 無
-      - else
-        = @spot.wifi
+      | wifi有無: #{@spot.wifi_status}
     div
       | 都道府県名: #{@spot.prefecture.name}
     div
       | タグ: #{@spot.spot_tag.tag.name}
     div
-      | スポット設備: 
-      - if @spot.spot_equipments.count != 0
-        - @spot.spot_equipments.each do |spot_equipment|
-          = spot_equipment.name
-          | ,
-      - else
-        | 無
+      span スポット設備:
+      table.table.table-striped.mt-3
+        thead
+          tr
+            th
+              | #
+            th
+              | スポット設備名
+            th
+              | スポット設備数
+            th
+              | スポット設備メモ
+        tbody
+          - @spot.spot_equipments.each.with_index(1) do |spot_equipment, index|
+            tr.table-info
+
+              th[scope="row"]
+                = index
+              td
+                = spot_equipment.name
+              td
+                = spot_equipment.qty
+              td
+                = spot_equipment.note
     div
       | レビュー全部: #{@spot.spot_reviews_count}
   .review-detail.col-md-6
     h3 Review
     - @spot.spot_reviews.each do |spot_review|
       div= spot_review.comment
-      .posted_at= spot_review.publication_status
+      .posted_at= spot_review.posted_at
