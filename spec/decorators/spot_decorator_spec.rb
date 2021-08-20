@@ -13,7 +13,6 @@ RSpec.describe SpotDecorator do
     end
 
     it '正しい結果' do
-      subject
       expect(subject.restroom_qty_status).to eq(0)
       expect(subject.wifi_status).to eq('無')
     end
