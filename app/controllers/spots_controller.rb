@@ -12,6 +12,10 @@ class SpotsController < ApplicationController
     render :index
   end
 
+  def show
+    @spot = Spot.find(params[:id])
+  end
+
   private
 
   def spot_params

@@ -4,4 +4,5 @@ class Spot < ApplicationRecord
   has_one :tag, through: :spot_tag
   has_many :spot_reviews, -> { order(posted_at: :desc) }, dependent: :destroy, inverse_of: :spot
   has_many :spot_schedules, dependent: :destroy
+  has_many :spot_equipments, dependent: :destroy
 end

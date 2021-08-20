@@ -18,6 +18,7 @@ gem 'turbolinks', '~> 5'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.7'
 
+gem 'active_decorator'
 gem 'bootstrap4-kaminari-views', '~> 1.0.1'
 gem 'kaminari'
 gem 'rails-i18n'

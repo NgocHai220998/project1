@@ -49,7 +49,7 @@ table.table.table-striped.mt-3
         th[scope="row"]
           = index
         td
-          = spot.name
+          = link_to spot.name, spot_path(spot.id)
         td
           = spot.body.truncate(30)
         td
