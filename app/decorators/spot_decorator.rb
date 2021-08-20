@@ -1,13 +1,9 @@
 module SpotDecorator
   def restroom_qty_status
-    return '0' if restroom_qty.nil?
-
-    restroom_qty
+    restroom_qty.presence || 0
   end
 
   def wifi_status
-    return '無' if wifi.nil?
-
-    '有'
+    wifi ? '有' : '無'
   end
 end
