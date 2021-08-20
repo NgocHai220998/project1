@@ -8,14 +8,14 @@ RSpec.describe SpotDecorator do
       spot = Spot.new
       decorated_spot = ActiveDecorator::Decorator.instance.decorate(spot)
 
-      expect(decorated_spot.restroom_qty_status).to eq("0")
+      expect(decorated_spot.restroom_qty_status).to eq('0')
     end
 
     it 'restroom_qtyがnilじゃ無い場合' do
       spot = Spot.new(restroom_qty: "5")
       decorated_spot = ActiveDecorator::Decorator.instance.decorate(spot)
 
-      expect(decorated_spot.restroom_qty_status).to eq("5")
+      expect(decorated_spot.restroom_qty_status).to eq('5')
     end
   end
 
@@ -24,14 +24,14 @@ RSpec.describe SpotDecorator do
       spot = Spot.new
       decorated_spot = ActiveDecorator::Decorator.instance.decorate(spot)
 
-      expect(decorated_spot.wifi_status).to eq("無")
+      expect(decorated_spot.wifi_status).to eq('無')
     end
 
     it 'restroom_qtyがnilじゃ無い場合' do
-      spot = Spot.new(wifi: "有")
+      spot = Spot.new(wifi: '有')
       decorated_spot = ActiveDecorator::Decorator.instance.decorate(spot)
 
-      expect(decorated_spot.wifi_status).to eq("有")
+      expect(decorated_spot.wifi_status).to eq('有')
     end
   end
 end
