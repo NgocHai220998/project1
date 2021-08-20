@@ -8,7 +8,7 @@ RSpec.describe SpotDecorator do
   end
 
   describe 'restroom_qtyとwifiがnil' do
-    let!(:spot1) do
+    let(:spot1) do
       Spot.new
     end
 
@@ -20,7 +20,7 @@ RSpec.describe SpotDecorator do
   end
 
   describe 'restroom_qtyとwifiがnilじゃない' do
-    let!(:spot1) do
+    let(:spot1) do
       Spot.new(restroom_qty: 5, wifi: '有')
     end
 
