@@ -6,3 +6,5 @@ ja:
         nickname: "ニックネーム"
         password: "パスワード"
         password_confirmation: "確認パスワード"
+      spot_review:
+        user_id: ""

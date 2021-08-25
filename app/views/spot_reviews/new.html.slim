@@ -9,3 +9,11 @@
   - else
     = link_to "ログイン", login_path
     h4 まだログインしないので、ログインしてください
+
+  - if @spot_review && @spot_review.errors.any?
+    #error_explanation
+      .alert.alert-danger
+        | #{@spot_review.errors.count}エラーあります.
+      ul
+        - @spot_review.errors.full_messages.each do |msg|
+          li= msg 

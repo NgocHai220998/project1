@@ -19,10 +19,11 @@ class SpotReviewsController < ApplicationController
     params.permit(:comment, :user_id, :spot_id)
   end
 
-  def hanle_save
-    @spot_review.id_spot = post_params[:spot_id]
-    @spot_review.id_user = current_user.id
-    @spot_review.save
+  def handle_save
+    @spot_review.current_user = current_user
+
+    flash[:danger] = 'ユーザーがこのスポートにレービューを書く数が３回ので、もうレビューを書くことができない' unless @spot_review.save
+    
     redirect_to spot_path(post_params[:spot_id])
   end
 end
