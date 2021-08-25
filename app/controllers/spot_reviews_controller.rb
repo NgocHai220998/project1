@@ -19,15 +19,10 @@ class SpotReviewsController < ApplicationController
     params.permit(:comment, :user_id, :spot_id)
   end
 
-  def handle_save
-    check = SpotReview.check_spot_review_max(post_params[:spot_id], @current_user.id)
-
-    if check
-      flash[:danger] = 'それぞれのユーザーがそれぞれのスポートにレービューを書く数が３回だけです。'
-      redirect_to root_path
-    else
-      @spot_review.save
-      redirect_to spot_path(post_params[:spot_id])
-    end
+  def hanle_save
+    @spot_review.id_spot = post_params[:spot_id]
+    @spot_review.id_user = current_user.id
+    @spot_review.save
+    redirect_to spot_path(post_params[:spot_id])
   end
 end

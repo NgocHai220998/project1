@@ -2,15 +2,17 @@ class SpotReview < ApplicationRecord
   belongs_to :spot, counter_cache: true
   belongs_to :user
 
-  class << self
-    def count_of_spot_review(spot_id, user_id)
-      @spot = Spot.find_by(id: spot_id)
+  attr_accessor :id_spot, :id_user
 
-      @spot.spot_reviews.select { |spot_review| spot_review.user_id == user_id }.count
-    end
+  validate :check_spot_review_max, on: :create
 
-    def check_spot_review_max(spot_id, user_id)
-      count_of_spot_review(spot_id, user_id) > 2
-    end
+  def count_of_spot_review
+    @spot = Spot.find_by(id: id_spot)
+
+    @spot.spot_reviews.select { |spot_review| spot_review.user_id == id_user }.count
+  end
+
+  def check_spot_review_max
+    errors.add(:user_id, 'それぞれのユーザーがそれぞれのスポートにレービューを書く数が３回だけです') if count_of_spot_review > 2
   end
 end
