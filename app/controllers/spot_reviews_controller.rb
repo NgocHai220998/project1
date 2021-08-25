@@ -20,8 +20,6 @@ class SpotReviewsController < ApplicationController
   end
 
   def handle_save
-    @spot_review.current_user = current_user
-
     flash[:danger] = 'ユーザーがこのスポートにレービューを書く数が３回ので、もうレビューを書くことができない' unless @spot_review.save
     
     redirect_to spot_path(post_params[:spot_id])
