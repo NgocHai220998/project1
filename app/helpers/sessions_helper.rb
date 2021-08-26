@@ -40,4 +40,11 @@ module SessionsHelper
   def current_user?(user)
     user && user == current_user
   end
+
+  def logged_in_user
+    return if logged_in?
+
+    flash[:danger] = 'ログインしてください'
+    redirect_to login_url
+  end
 end
