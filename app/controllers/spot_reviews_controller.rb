@@ -6,7 +6,7 @@ class SpotReviewsController < ApplicationController
   end
 
   def create
-    @spot_review = SpotReview.new(post_params)
+    @spot_review = current_user.spot_reviews.build(post_params)
 
     if @spot_review.save
       flash[:success] = 'レビューできました'
@@ -20,6 +20,6 @@ class SpotReviewsController < ApplicationController
   private
 
   def post_params
-    params.permit(:comment, :user_id, :spot_id)
+    params.permit(:comment, :spot_id)
   end
 end

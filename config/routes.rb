@@ -17,6 +17,5 @@ Rails.application.routes.draw do
     delete '/logout', to: 'sessions#destroy'
 
     resources :spot_reviews
-    get '/spot_reviews/new', to: 'spot_reviews#new'
   end
 end
