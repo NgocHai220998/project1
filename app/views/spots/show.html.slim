@@ -45,3 +45,5 @@
     - @spot.spot_reviews.each do |spot_review|
       div= spot_review.comment
       .posted_at= spot_review.posted_at
+.review-comment.col-md-6
+  = render template: 'spot_reviews/new'
