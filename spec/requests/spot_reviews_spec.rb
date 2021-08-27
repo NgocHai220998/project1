@@ -9,19 +9,20 @@ RSpec.describe 'SpotReviews', type: :request do
     FactoryBot.create(:spot, :with_spot_review, :with_spot_schedule, reviews_count: current_reviews_count, user_id: user.id, start_on: Time.zone.now - 11.days, end_on: Time.zone.now - 5.days)
   end
 
+  subject do
+    post spot_reviews_path, params: {
+      spot_id: spot.id,
+      comment: 'レビューのコメント'
+    }
+    response.body
+  end
+
   context 'ログインしている場合' do
     before do
       post login_path, params: {session: {
         email: user.email,
         password: user.password
       }}
-    end
-
-    subject do
-      post spot_reviews_path, params: {
-        spot_id: spot.id,
-        comment: 'レビューのコメント'
-      }
     end
 
     context 'current_reviews_count < 3 場合' do
@@ -44,14 +45,6 @@ RSpec.describe 'SpotReviews', type: :request do
 
   context 'ログインしない場合' do
     let(:current_reviews_count) { 2 }
-
-    subject do
-      post spot_reviews_path, params: {
-        spot_id: spot.id,
-        comment: 'レビューのコメント'
-      }
-      response.body
-    end
 
     it "レビューを書くことができない" do
       is_expected.to redirect_to(login_url)
