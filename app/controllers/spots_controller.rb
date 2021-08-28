@@ -9,7 +9,7 @@ class SpotsController < ApplicationController
 
   def search
     @spots = includes_table(@q.result(distinct: true))
-    
+
     respond_to do |format|
       format.html { render :index }
       format.js
