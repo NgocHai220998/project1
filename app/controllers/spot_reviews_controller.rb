@@ -8,13 +8,18 @@ class SpotReviewsController < ApplicationController
   def create
     @spot_review = current_user.spot_reviews.build(post_params)
 
-    if @spot_review.save
-      flash[:success] = 'レビューできました'
-    else
-      flash[:danger] = 'ユーザーがこのスポートにレービューを書く数が３回ので、もうレビューを書くことができない'
+    respond_to do |format|
+      format.html do
+        if @spot_review.save
+          flash[:success] = 'レビューできました'
+        else
+          flash[:danger] = 'ユーザーがこのスポートにレービューを書く数が３回ので、もうレビューを書くことができない'
+        end
+
+        redirect_to spot_path(post_params[:spot_id])
+      end
     end
 
-    redirect_to spot_path(post_params[:spot_id])
   end
 
   private
