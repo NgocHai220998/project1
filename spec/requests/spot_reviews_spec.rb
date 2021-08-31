@@ -5,7 +5,7 @@ RSpec.describe 'SpotReviews', type: :request do
     post spot_reviews_path, params: {
       spot_id: spot.id,
       comment: 'レビューのコメント'
-    }
+    }, xhr: true
     response.body
   end
   

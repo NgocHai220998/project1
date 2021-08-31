@@ -1,4 +1,4 @@
-= form_with url: spot_reviews_path do |f|
+= form_with url: spot_reviews_path, remote: true do |f|
   .form-group
     = f.label :comment
     = f.text_area :comment, class: 'form-control'
