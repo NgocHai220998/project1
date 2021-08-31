@@ -19,7 +19,7 @@ FactoryBot.define do
     trait :with_spot_review do
       transient do
         user_id { 1 }
-        reviews_count { 5 }
+        reviews_count { 2 }
       end
 
       after(:build) do |spot, evaluator|

@@ -2,8 +2,12 @@ require 'rails_helper'
 include Capybara::RSpecMatchers
 
 RSpec.describe "Spots", type: :request do
+  let(:user) do
+    FactoryBot.create(:user)
+  end
+
   describe "GET /spots" do
-    let!(:spots){ FactoryBot.create_list(:spot, 31, :with_spot_review)}
+    let!(:spots){ FactoryBot.create_list(:spot, 31, :with_spot_review, user_id: user.id)}
 
     before(:each) do
       get root_path
@@ -56,6 +60,13 @@ RSpec.describe "Spots", type: :request do
       end
     end
 
+    it '日付とタグと都道府県を指定することが表示されていること' do
+      expect(response.body).to have_selector('input#q_spot_schedules_start_on_gteq')
+      expect(response.body).to have_selector('input#q_spot_schedules_end_on_lteq')
+      expect(response.body).to have_selector("select#q_prefecture_name_eq")
+      expect(response.body).to have_selector("select#q_tag_name_in")
+    end
+
     it "レビューのコメントが20字以内で表示されていること" do
       (0... SpotsController::SPOT_LIMIT - 1).each do |i|
         spots[i].spot_reviews.first(3).each do |recent_review|
@@ -84,7 +95,7 @@ RSpec.describe "Spots", type: :request do
         prefecture_name_eq: prefecture_name_eq,
         tag_name_in: tag_name_in,
         spot_reviews_count_gt: spot_reviews_count_gt
-      }}
+      }}, xhr: true
       response.body
     end
 
@@ -95,30 +106,23 @@ RSpec.describe "Spots", type: :request do
     let(:spot_reviews_count_gt) {}
 
     let!(:spot1) do
-      FactoryBot.create(:spot, :with_spot_review, :with_spot_schedule, reviews_count: 2, start_on: Time.zone.now - 11.days, end_on: Time.zone.now - 5.days)
+      FactoryBot.create(:spot, :with_spot_review, :with_spot_schedule, reviews_count: 1, user_id: user.id, start_on: Time.zone.now - 11.days, end_on: Time.zone.now - 5.days)
     end
 
     let!(:spot2) do
-      FactoryBot.create(:spot, :with_spot_review, :with_spot_schedule, reviews_count: 10, start_on: Time.zone.now - 9.days, end_on: Time.zone.now - 4.days)
+      FactoryBot.create(:spot, :with_spot_review, :with_spot_schedule, reviews_count: 1, user_id: user.id, start_on: Time.zone.now - 9.days, end_on: Time.zone.now - 4.days)
     end
 
     let!(:spot3) do
-      FactoryBot.create(:spot, :with_spot_review, :with_spot_schedule, reviews_count: 15, start_on: Time.zone.now - 8.days, end_on: Time.zone.now - 3.days)
+      FactoryBot.create(:spot, :with_spot_review, :with_spot_schedule, reviews_count: 2, user_id: user.id, start_on: Time.zone.now - 8.days, end_on: Time.zone.now - 3.days)
     end
 
     let!(:spot4) do
-      FactoryBot.create(:spot, :with_spot_review, :with_spot_schedule, reviews_count: 21, start_on: Time.zone.now - 7.days, end_on: Time.zone.now - 2.days)
+      FactoryBot.create(:spot, :with_spot_review, :with_spot_schedule, reviews_count: 2, user_id: user.id, start_on: Time.zone.now - 7.days, end_on: Time.zone.now - 2.days)
     end
 
     let!(:spot5) do
-      FactoryBot.create(:spot, :with_spot_review, :with_spot_schedule, reviews_count: 6, start_on: Time.zone.now - 6.days, end_on: Time.zone.now)
-    end
-
-    it '日付とタグと都道府県を指定することが表示されていること' do
-      is_expected.to have_selector('input#q_spot_schedules_start_on_gteq')
-      is_expected.to have_selector('input#q_spot_schedules_end_on_lteq')
-      is_expected.to have_selector("select#q_prefecture_name_eq")
-      is_expected.to have_selector("select#q_tag_name_in")
+      FactoryBot.create(:spot, :with_spot_review, :with_spot_schedule, reviews_count: 1, user_id: user.id, start_on: Time.zone.now - 6.days, end_on: Time.zone.now)
     end
 
     context 'start_onが適当じゃない' do
@@ -197,7 +201,7 @@ RSpec.describe "Spots", type: :request do
     end
 
     context 'レビュー数が適当' do
-      let(:spot_reviews_count_gt) { 10 }
+      let(:spot_reviews_count_gt) { 1 }
       
       it '検索結果が正しいこと' do
         is_expected.not_to have_content(spot1.name)
@@ -211,7 +215,7 @@ RSpec.describe "Spots", type: :request do
 
   describe '詳細' do
     let!(:spot1) do
-      FactoryBot.create(:spot, :with_spot_review, :with_spot_schedule, :with_spot_equipment, reviews_count: 6, start_on: Time.zone.now - 7.days, end_on: Time.zone.now - 2.days, equipment_count: 2)
+      FactoryBot.create(:spot, :with_spot_review, :with_spot_schedule, :with_spot_equipment, reviews_count: 2, user_id: user.id, start_on: Time.zone.now - 7.days, end_on: Time.zone.now - 2.days, equipment_count: 2)
     end
 
     before(:each) do
