@@ -4,9 +4,9 @@ document.querySelector(".pagination").innerHTML = "<%= j paginate(@spots, remote
 
 x = document.getElementsByClassName("review-modal");
 
-  for(let i = 0; i< x.length; i++) {
-    x[i].onclick = function () {
-      const recentReview = document.getElementById(`spot-${this.dataset.id}`);
-      recentReview.classList.toggle('hidden');
-    };
-  }
+for(let i = 0; i< x.length; i++) {
+  x[i].onclick = function () {
+    const recentReview = document.getElementById(`spot-${this.dataset.id}`);
+    recentReview.classList.toggle('hidden');
+  };
+}
