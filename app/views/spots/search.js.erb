@@ -1,0 +1,12 @@
+document.querySelector("#spots").innerHTML = "<%= j render partial: 'spots/spot', locals: { spots: @spots } %>";
+
+document.querySelector(".pagination").innerHTML = "<%= j paginate(@spots, remote: true, theme: "twitter-bootstrap-4") %>";
+
+x = document.getElementsByClassName("review-modal");
+
+  for(let i = 0; i< x.length; i++) {
+    x[i].onclick = function () {
+      const recentReview = document.getElementById(`spot-${this.dataset.id}`);
+      recentReview.classList.toggle('hidden');
+    };
+  }
